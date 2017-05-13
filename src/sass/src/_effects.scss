@@ -1,0 +1,41 @@
+.effects {
+	border-left: 1px solid #ffffff;
+	background-color:#cccccc;
+}
+.slider-container {
+	padding: 5px;
+	border-top: 1px solid #ffffff;
+	border-bottom: 1px solid #2b2b2b;
+	border-right: 1px solid #2b2b2b;
+	width:100%;
+	padding: 10px;
+	font-size:14px;
+	input {
+		box-sizing: border-box;
+		display: block;
+		width: 100%;
+	}
+	.slider-container__gain {
+
+	}
+	.slider-container__gain--onoff {
+		display: inline-block;
+		width:20px;
+		height: 23px;
+		padding-top: 0;
+		margin-top:0;
+	}
+	.slider-container__gain--slider {
+		display: inline-block;
+		width:230px;
+		margin-top:10px;
+	}
+	&.crossfader{
+		background-color: #afafaf;
+		border-top: 1px solid #2b2b2b;
+		border-right: 1px solid #ffffff;
+		border-left: 1px solid #2b2b2b;
+		border-bottom: 1px solid #ffffff;
+	}
+}
+

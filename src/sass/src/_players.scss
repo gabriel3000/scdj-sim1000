@@ -1,0 +1,57 @@
+
+.playerswrap{
+	top: 0px;
+	right: 0px;
+	position: absolute;
+	width:70%;
+	padding: 20px;
+}
+.players{
+	&:after{
+		content:"";
+		display:block;
+		clear:both;
+	}
+}
+.left{
+	h4{
+		background-color: #8cff72;
+		border-bottom: 1px solid #000;
+		border-right:1px solid #000;
+		border-left: 1px solid #BDFFB4;
+		border-top: 1px solid #BDFFB4;
+	}
+}
+.right{
+	h4{
+		background-color: #F9A0FF;
+		border-bottom: 1px solid #000;
+		border-right:1px solid #000;
+		border-left: 1px solid #EFE5FF;
+		border-top: 1px solid #EFE5FF;
+	}
+}
+h4{
+	text-align: center;
+	margin: 0;
+	padding: 20px;
+}
+.playercontent{
+	background-color: #afafaf;
+	margin-bottom: 20px;
+	border-top: 1px solid #2b2b2b;
+	border-right: 1px solid #ffffff;
+	border-left: 1px solid #2b2b2b;
+	border-bottom: 1px solid #ffffff;
+	float:left;
+	width: 50%;
+	h2{
+		text-align:center;
+	}
+}
+.waveform{
+	width:100%;
+	height:auto;
+	display:block;
+	background-color:#000000;
+}

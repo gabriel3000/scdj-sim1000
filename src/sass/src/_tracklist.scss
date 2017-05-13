@@ -1,0 +1,67 @@
+.tracklistwrap {
+	top: 0px;
+	left: 0px;
+	width: 30%;
+	height: 100%;
+	position: absolute;
+	overflow: hidden;
+	border-top: 1px solid #ffffff;
+	border-right: 1px solid #2b2b2b;
+	border-left: 1px solid #ffffff;
+	background-color:#cccccc;
+	border-bottom: 1px solid #2b2b2b;
+	padding-top:40px;
+}
+.playertoggles {
+	position:relative;
+	z-index: 10;
+}
+.tracklist{
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow-y: scroll;
+}
+.tracklistitem {
+	padding: 5px;
+	border-top: 1px solid #ffffff;
+	border-bottom: 1px solid #2b2b2b;
+	border-right: 1px solid #2b2b2b;
+	font-size:14px;
+	flex-direction: row;
+	display: flex;
+	cursor: pointer;
+	&:hover {
+		background-color: #e0e0e0;
+	}
+	&.selected {
+		background-color: #8cff72;
+		border-top: 1px solid #8cff72;
+		border-bottom: 1px solid #8cff72;
+	}
+}
+.trackthumb {
+	background-color: #b7b7b7;
+	width: 50px;
+	height: 50px;
+	border-top: 1px solid #2b2b2b;
+	border-right: 1px solid #ffffff;
+	border-left: 1px solid #2b2b2b;
+	border-bottom: 1px solid #ffffff;
+	margin-right: 10px;
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+.trackinfo{
+	width: 300px;
+}
+.tracktitle{
+	margin:0;
+	padding:0;
+	font-weight: bolder;
+}
+.trackdescription{
+	font-weight: lighter;
+}
