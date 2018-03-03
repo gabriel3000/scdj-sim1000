@@ -13,9 +13,8 @@ export default class BasicAudioControls extends React.Component {
 
     handleInputChange(event) {
         let buttonName = event.target.name;
-        let playerId = this.props.playerId;
         let trackId = this.props.trackId;
-        AL.controls(buttonName,playerId,trackId);
+        AL.controls(buttonName,trackId);
     }
 
     render() {

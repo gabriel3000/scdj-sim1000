@@ -2,7 +2,6 @@ import React from 'react';
 import SliderPlaybackRate from './SliderPlaybackRate';
 import BasicAudioControls from './BasicAudioControls';
 import SliderGain from './SliderGain';
-import AnalyzerElem from './AnalyzerElem';
 import {AL} from '../container/AudioLayer';
 
 export default class Player extends React.Component {
@@ -11,27 +10,36 @@ export default class Player extends React.Component {
     }
 
     buildPlayerInfo(trackInfoObj,trackData){
-        trackInfoObj.trackname = trackData.title;
-        trackInfoObj.trackId = trackData.id;
-        trackInfoObj.waveform = trackData.waveform_url;
+        if(trackData != null){
+            trackInfoObj.trackname = trackData.title;
+            trackInfoObj.trackId = trackData.id;
+            trackInfoObj.waveform = trackData.waveform_url;
+        }
+    }
+
+    componentWillMount(){
+        console.log("Player Component Will Mount");
+    }
+
+    componentDidMount(){
+        console.log("Player Component Did Mount");
     }
 
     render() {
+        try {
         let playercontent = <div><h4>please select a track</h4></div>
         let trackInfoObj = {};
         
-        if(this.props.player1TrackSelection){
-            this.buildPlayerInfo(trackInfoObj,this.props.player1TrackSelection);
-        }else if(this.props.player2TrackSelection){
-            this.buildPlayerInfo(trackInfoObj,this.props.player2TrackSelection);
-        }
+
+        this.buildPlayerInfo(trackInfoObj,this.props.playerTrackSelection);
+
 
         if(trackInfoObj.trackId){
-            playercontent = <div className={this.props.playerId}>
+            playercontent = <div>
             <h4>{trackInfoObj.trackname}</h4>
-            <BasicAudioControls playerId={this.props.playerId} trackId={trackInfoObj.trackId}/>
-            <SliderPlaybackRate playerId={this.props.playerId} trackId={trackInfoObj.trackId}/>
-            <SliderGain playerId={this.props.playerId} trackId={trackInfoObj.trackId}/>
+            <BasicAudioControls trackId={trackInfoObj.trackId}/>
+            <SliderPlaybackRate trackId={trackInfoObj.trackId}/>
+            <SliderGain trackId={trackInfoObj.trackId}/>
             </div>
         }
 
@@ -40,5 +48,9 @@ export default class Player extends React.Component {
                 {playercontent}
             </div>
         );
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 }

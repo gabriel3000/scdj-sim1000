@@ -1,16 +1,19 @@
-//local vs session vs cookie
+// local vs session vs cookie
+
+// DEBUG IN FF. AUDIO DESTINATION IS NOT MATCHING WITH THE GAIN NODE
+// TWO GAIN NODES ARE BEING MADE WE ONLY NEED ONE FOR NOW.
+// CONNECTIONS ARE FLAWED
+
 import Global from "./SCDJ-Global";
 class AudioLayer {
     constructor() {
         let config = new Global();
-        console.log(config.ScUserId)
         this.AudioContext = new(window.AudioContext || window.webkitAudioContext)();
         this.ScUserId = config.ScUserId;
         this.ScClientId = config.ScClientId;
         this.ScRedirectURI = config.ScRedirectURI;
         this.samples = {};
-        this.player1 = null;
-        this.player2 = null;
+        this.player = 0;
         this.startOfLoop = true;
         this.createMasterGainNode(this);
         this.loopActive = false;
@@ -23,35 +26,16 @@ class AudioLayer {
 
     createMasterGainNode(AL){
         AL.masterGainNode = AL.AudioContext.createGain();
-        AL.leftGainNode = AL.AudioContext.createGain();
-        AL.rightGainNode = AL.AudioContext.createGain();
-        AL.leftXfadeGainNode = AL.AudioContext.createGain();
-        AL.rightXfadeGainNode = AL.AudioContext.createGain();
-
         AL.masterGainNode.gain.value = 0.8;
-        AL.leftGainNode.gain.value = 0.8;
-        AL.rightGainNode.gain.value = 0.8;
-        AL.leftXfadeGainNode.gain.value = 0.8;
-        AL.rightXfadeGainNode.gain.value = 0.8;
-
-        AL.leftGainNode.connect(AL.leftXfadeGainNode);
-        AL.rightGainNode.connect(AL.rightXfadeGainNode);
-
-        AL.leftXfadeGainNode.connect(AL.masterGainNode);
-        AL.rightXfadeGainNode.connect(AL.masterGainNode);
-
         AL.masterGainNode.connect(AL.AudioContext.destination);
     }
 
-    updateTrack(trackObj,playerId){
+    updateTrack(trackObj){
 
-
-        if(this.player1 != null && playerId == 0){
-            this.samples[this.player1].disconnect(this.leftGainNode);
+        if(this.samples.length > 0){
+            this.samples[this.player].disconnect(this.masterGainNode);
         }
-        if(this.player2 != null && playerId == 1){
-            this.samples[this.player2].disconnect(this.rightGainNode);
-        }
+    
 
         const streamUrl = trackObj.stream_url;
         const trackId = trackObj.id;
@@ -74,49 +58,44 @@ class AudioLayer {
                 //AudioLayer.samples.sampleBuffer = sample;
                 AudioLayer.samples[trackId] = sample;
                 //AudioLayer[playerId] = sample;
-                AudioLayer.trackLoaded(trackId,playerId);
+                console.log(sample);
+                console.log(trackId);
+                AudioLayer.trackLoaded(trackId);
             });
         };
         request.send();
     }
 
 
-
-    trackLoaded(trackId,playerId){
-        let gain = playerId == 0 ? this.leftGainNode : this.rightGainNode;
+    trackLoaded(trackId){
+        let gain = this.masterGainNode;
         let trackSelection;
-        if(playerId == 0){
-            this.player1 = trackId;
-            trackSelection = this.player1;
-        }else{
-            this.player2 = trackId;
-            trackSelection = this.player2;
-        }
+
+        this.player = trackId;
+        trackSelection = this.player;
+
         this.samples[trackSelection].connect(gain);
+
+        console.log("this.samples[trackSelection]: "+this.samples[trackSelection]);
     }
 
 
-    controls(buttonName,playerId,trackId){
-        let gain = playerId == 0 ? this.leftGainNode : this.rightGainNode;
+    controls(buttonName,trackId){
+        let gain = this.masterGainNode;
         let reffrenceBuffer = this.samples[trackId];
+
         if(buttonName == "playPause"){
             //First Play
             if(this.paused){
-                let newBuff = this.AudioContext.createBufferSource();
-                newBuff.buffer = reffrenceBuffer.buffer;
-                newBuff.playbackRate.value = reffrenceBuffer.playbackRate.value;
-                newBuff.connect(gain);
-                this.samples[trackId] = newBuff;
                 this.paused = false;
-
                 if(this.pausedAt){
                     this.startedAt = Date.now() - this.pausedAt;
-                    newBuff.start(0, this.pausedAt / 1000);
+                    reffrenceBuffer.start(0, this.pausedAt / 1000);
                     console.log("post initial play: "+this.pausedAt / 1000);
                     //console.log("initial play: " + reffrenceBuffer.context.currentTime);
                 }else{
                     this.startedAt = Date.now();
-                    newBuff.start(0);
+                    reffrenceBuffer.start(0);
                     console.log("initial play");
                 }
             }else{

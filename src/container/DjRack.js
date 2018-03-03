@@ -3,7 +3,6 @@ import SC from "soundcloud";
 import TrackListItem from "../presentation/TrackListItem";
 import Scorpion from "../presentation/Scorpion";
 import Player from "../presentation/Player";
-import SliderCrossFader from '../presentation/SliderCrossFader';
 import TogglePlayerButton from '../presentation/TogglePlayerButton';
 import {AL} from './AudioLayer';
 import Global from "./SCDJ-Global";
@@ -13,26 +12,20 @@ class DjRack extends React.Component {
         super(props);
         this.state = {
             activeIndex: null,
-            playerActive: 0,
             tracks: [],
             tracksLoaded: false,
             loadMoreURL: null,
-            player1TrackSelection:null,
-            player2TrackSelection:null
-
+            playerTrackSelection:null
         };
     }
 
     handleTrackClick(index,i){
+        console.log(this.state.tracks[index]);
         this.setState({
             activeIndex:index,
+            playerTrackSelection:this.state.tracks[index],
         });
-        if(this.state.playerActive === 0){
-            this.setState({player1TrackSelection:this.state.tracks[index]});
-        }else if(this.state.playerActive === 1){
-            this.setState({player2TrackSelection:this.state.tracks[index]});
-        }
-        AL.updateTrack(this.state.tracks[index],this.state.playerActive);
+        AL.updateTrack(this.state.tracks[index]);
     }
 
     handleLoadMoreClick(button){
@@ -89,16 +82,6 @@ class DjRack extends React.Component {
         let samplerContent = null;
         if(this.state.tracksLoaded){
             samplerContent = <div className="rack">
-                <div className="playertoggles">
-                    {["button1","button2"].map(
-                        (value, i) => (
-                        <TogglePlayerButton
-                        key={i}
-                        onClick={this.handlePlayerSelection.bind(this,i)}
-                        buttonCopy={value} />
-                        )
-                    )}
-                </div>
                 <div className="tracklistwrap">
                     <div className="tracklist">
                         {this.state.tracks.map(
@@ -115,10 +98,8 @@ class DjRack extends React.Component {
                 </div>
                 <div className="playerswrap">
                     <div className="players">
-                        <Player playerId="left" player1TrackSelection={this.state.player1TrackSelection} playerActive={this.state.playerActive}/>
-                        <Player playerId="right" player2TrackSelection={this.state.player2TrackSelection} playerActive={this.state.playerActive}/>
+                        <Player playerTrackSelection={this.state.playerTrackSelection}/>
                     </div>
-                    <SliderCrossFader />
                 </div>
             </div>
         }else{

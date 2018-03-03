@@ -20,7 +20,7 @@ export default class SliderGain extends React.Component {
     }
 
     render() {
-        let gainNode = this.props.playerId == "left" ? AL.leftGainNode : AL.rightGainNode;
+        let gainNode = AL.masterGainNode;
         gainNode.gain.value = this.state.gainslider;
 
         return (
